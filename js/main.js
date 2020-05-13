@@ -74,5 +74,28 @@ class Graph {
 			print = print + '\n'
 		}
 		console.log(print)
+
+		var c = document.getElementById("myCanvas")
+		var ctx = c.getContext("2d")
+		var x = 50
+		var y = 50
+		ctx.font = "30px Verdana";
+		for (var i=0; i < this.nVertices; i++) {
+			ctx.beginPath()
+			ctx.arc(x, y, 40, 0, 2 * Math.PI);
+			ctx.stroke();
+			if (i < 10) {
+				ctx.fillText(i, x-10, y+10);
+			} else {
+				ctx.fillText(i, x-20, y+10);
+			}
+			x+=150
+			if (x > 1000) {
+				x = 50
+				y+=125
+			}
+		}
+
+	
 	} 
 }

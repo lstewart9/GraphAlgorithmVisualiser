@@ -7,4 +7,10 @@
 
 .btn-default a:hover {
 	color: lightgray;
+}
+
+.myCanvas {
+	border: 4px;
+	border-style: solid;
+	border-color: lightslategray;
   }
