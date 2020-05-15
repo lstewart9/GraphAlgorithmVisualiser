@@ -2,30 +2,68 @@
 <html lang = "en">
 <head>
 	<meta charset="utf-8">
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
-
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/3.6.3/fabric.min.js"></script>
-
+	<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 	<script src="js/main.js"></script>
 	<link href="index.css" rel="stylesheet" type="text/css">
 </head>
 
-<body>
+<body style="background-color:blanchedalmond">
 
 <center>
 <div>
 	<h1> Graph Algorithm Visualiser</h1>
 </div>
 <div class="container.fluid" id="menu">
-	<button type="button" class="btn-default" onclick="generateGraph()">Generate Graph</button>
-	<button type="button" class="btn-default">Button 2</button>
+	<button type="button" class="btn btn-primary" onclick="generateGraph()">Generate Graph</button>
+	<button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+		Algorithms
+	  </button>
+	  <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+	  <a class="dropdown-item" href="#" data-toggle="modal" data-target="#startVertexleModal">Depth First Search</a>
+		<a class="dropdown-item" href="#">Another action</a>
+		<a class="dropdown-item" href="#">Something else here</a>
+	  </div>
 </div>
 <br>
-<canvas id="myCanvas" width="1200" height="600"class="myCanvas">
-</canvas>
-
 </center>
+<div class = "row">
+	<div class="col-md-8">
+		<div class = myDiv>
+			<canvas id="myCanvas" width="920" height="600">
+			</canvas>
+		</div>
+	</div>
+	<div class="col-md-4">
+		hello
+	</div>
+</div>
+
+<div class="modal fade" id="startVertexleModal" tabindex="-1" role="dialog" aria-labelledby="startVertexLabel" aria-hidden="true">
+	<div class="modal-dialog" role="document">
+	  <div class="modal-content">
+		<div class="modal-body">
+			<form action="#" id="startVertexForm" >
+				<div class="form-row align-items-center">
+					<div class="col-4">
+						<label for="e_name">Starting Vertex:</label>
+					</div>
+					<div class="col-sm-8">
+						<input type="text" class="form-control" id="start" required>
+					</div>
+				</div>
+			</form>
+		</div>
+		<div class="modal-footer">
+		  <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+		  <button type="button" class="btn btn-primary" onclick="beginDFS()" data-dismiss="modal">Begin</button>
+		</div>
+	  </div>
+	</div>
+  </div>
+
 </body>
 </html>
