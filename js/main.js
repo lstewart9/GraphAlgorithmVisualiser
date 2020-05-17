@@ -2,6 +2,9 @@ var graph
 var canvas
 var verticiesCoords = []
 var verticies = []
+var DFSstack = []
+var visited = []
+var prevNode
 
 
 $(document).ready(function() {
@@ -39,7 +42,7 @@ function generateGraph() {
 	console.log("Generating Graph...");
 
 	// generate random number of verticies
-	var nVerticies = randomNumber(2,10)
+	var nVerticies = randomNumber(2,6)
 	graph = new Graph(nVerticies);
 	console.log(nVerticies)
 
@@ -86,18 +89,48 @@ class Graph {
 		//this.AdjList.get(w).push(v); 
 	} 
 
-	DFS(start, visited) {
-		visited[start] = true;
-		console.log("======")
+	startDFS(start) {
+		//DFSstack.unshift(start)
+		visited[start] = true
+		prevNode=start
+
+		var DFSStatus = ""
+
 		for (var i = 0; i < this.nVertices; i++) {
-			if (this.adjMatrix[start][i] == 1 && visited[i] != true) {
-				verticies[i].set('fill', 'lightgreen');
-				console.log(i)
-				console.log(verticies[i])
-				setTimeout(() => { verticies[i].set('fill', 'lightslategray'); }, 2000);
-				setTimeout(() => { this.DFS(i, visited); }, 4000);
-			} 
+			if (this.adjMatrix[start][i] == 1 && !visited[i] && start!=i) {
+				visited[i] = true;
+				DFSstack.unshift(i);
+				DFSStatus+= "- Adding node " + i + " to the stack. <br>";
+			}
 		}
+		document.getElementById("currDFSStatus").innerHTML = DFSStatus;
+	}
+
+	iterateDFS() {
+
+		var DFSStatus = ""
+
+		if (DFSstack.length == 0 ) {
+			DFSStatus = "- Done";
+		} else {
+			verticies[prevNode].set('fill', 'maroon');
+			canvas.renderAll();
+			var node = DFSstack.pop()
+			DFSStatus+= "- Popping node " + node + " off the stack. <br>";	
+			verticies[node].set('fill', 'lightgreen');
+			canvas.renderAll();
+			console.log("Removing node " + node + " from the stack...");
+			for (var i = 0; i < this.nVertices; i++) {
+				if (this.adjMatrix[node][i] == 1 && !visited[i] && node!=i) {
+					visited[i] = true;
+					DFSstack.unshift(i);
+					DFSStatus+= "- Adding node " + i + " to the stack";	
+				}
+			}	
+			prevNode=node
+		}
+
+		document.getElementById("currDFSStatus").innerHTML = DFSStatus;
 
 	}
 
@@ -132,8 +165,7 @@ class Graph {
 				fill: 'lightslategray',
 				hasBorders : true,
 				borderColor: "black",
-				selectionBackgroundColor :"blue"
-
+				selectionBackgroundColor :"blue",
 			});
 			
 			verticies.push(circle)
@@ -151,6 +183,9 @@ class Graph {
 			var group = new fabric.Group([ circle, text ], {
 			left: x,
 			top: y,
+			hoverCursor: 'default',
+			selectable: false,
+			hasControls: false,
 			});
 
 			canvas.add(group);
@@ -165,8 +200,8 @@ class Graph {
 				y-=100
 			}
 
-			x+=200
-			if (x > 1000) {
+			x+=350
+			if (x > 1050) {
 				x = 30
 				y+=300
 			}
@@ -200,51 +235,35 @@ function createLine(points) {
 	  hoverCursor: 'default',
 	  selectable: false
 	});
-	/*
-	var headLength = 15,
-  
-		x1 = points[0],
-		y1 = points[1],
-		x2 = points[2],
-		y2 = points[3],
-  
-		dx = x2 - x1,
-		dy = y2 - y1,
-  
-		angle = Math.atan2(dy, dx);
-  
-	angle *= 180 / Math.PI;
-	angle += 90;
 	
-	
-	var triangle = new fabric.Triangle({
-	  angle: angle,
-	  fill: '#207cca',
-	  top: y2,
-	  left: x2,
-	  height: headLength,
-	  width: headLength,
-	  originX: 'center',
-	  originY: 'center',
-	  selectable: false
-	});
-	*/
 	canvas.add(line);
 	line.sendToBack()
 	canvas.renderAll();
 }
 
-function wait(ms)
-{
-    var d = new Date();
-    var d2 = null;
-    do { d2 = new Date(); }
-    while(d2-d < ms);
-}
+
 
 function beginDFS() {
 	var form = $('#startVertexForm')[0].elements
 	start = parseInt(form[0].value)
 	console.log(start)
-	graph.DFS(start, [])
+	graph.startDFS(start)
+	var currDFSStack = ""
+	for (var i = DFSstack.length; i > 0; i--) {
+		currDFSStack += DFSstack[i-1] + "<br>" + "---" + "<br>"
+	}
+	document.getElementById("currDFSStack").innerHTML = currDFSStack
+}
+
+function iterateDFS() {
+	graph.iterateDFS()
+	var currDFSStack = ""
+	for (var i = DFSstack.length; i > 0; i--) {
+		currDFSStack += DFSstack[i-1] + "<br>" + "---" + "<br>"
+	}
+	document.getElementById("currDFSStack").innerHTML = currDFSStack
+}
+
+function clearGraph() {
+	canvas.clear()
 }

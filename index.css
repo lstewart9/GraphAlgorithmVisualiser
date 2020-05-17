@@ -10,3 +10,9 @@
 	border: thick solid lightslategray;
 	margin-left: 20px;
 }
+
+.DFSdetails {
+	border: thick solid lightslategray;
+	margin-right: 20px;
+	height: 600px;
+}
