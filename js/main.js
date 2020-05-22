@@ -8,9 +8,9 @@ var BFSqueue = []
 var BFSvisited= []
 var prevNode
 var currNode
-var prevLinks
+//node: number of not already nodes added
 var prevAddedNodes = []
-var nprevAddedNodes
+var prevAddedNodesOrder = []
 
 
 $(document).ready(function() {
@@ -71,7 +71,6 @@ function generateGraph() {
 	var nVerticies = randomNumber(2,6)
 	graph = new Graph(nVerticies);
 	console.log(nVerticies)
-
 	
 	for (var i = 0; i < nVerticies; i++) {
 		graph.addVertex();
@@ -118,26 +117,23 @@ class Graph {
 	startDFS(start) {
 		DFSvisited[start] = true
 		var DFSStatus = ""
+
+		//add start node to order list
+		prevAddedNodesOrder.push(start)
+		prevAddedNodes[start] = 0;
+
 		verticies[start].set('fill', 'lightgreen');
 		canvas.renderAll();
-
-		//add start to prev added nodes list
-		nprevAddedNodes = 0
-		prevAddedNodes.push(start)
-
 
 		for (var i = 0; i < this.nVertices; i++) {
 			if (this.adjMatrix[start][i] == 1 && !DFSvisited[i] && start!=i) {
 				DFSvisited[i] = true;
 				DFSstack.push(i);
 				DFSStatus+= "- Adding node " + i + " to the stack. <br>";
-				nprevAddedNodes++
+				prevAddedNodes[start]++;
 			}
 		}
 		document.getElementById("currDFSStatus").innerHTML = DFSStatus;
-		currNode = start
-		prevNode = null
-
 	}
 
 	iterateDFS() {
@@ -148,7 +144,6 @@ class Graph {
 		console.log("prevNode: " + prevNode)
 		console.log("currNode: " + currNode)
 
-		nprevAddedNodes = 0;
 		prevNode = prevAddedNodes[(prevAddedNodes.length-1)]
 
 		var DFSStatus = ""
@@ -156,23 +151,28 @@ class Graph {
 		if (DFSstack.length == 0 ) {
 			DFSStatus = "- Done";
 		} else {
+
+			prevNode = prevAddedNodesOrder[prevAddedNodesOrder.length-1]
+
 			verticies[prevNode].set('fill', 'maroon');
 			canvas.renderAll();
 
 			currNode = DFSstack.pop()
-
 			DFSStatus+= "- Popping node " + currNode + " off the stack. <br>";	
 			verticies[currNode].set('fill', 'lightgreen');
 			canvas.renderAll();
+
+			prevAddedNodesOrder.push(currNode)
+			prevAddedNodes[currNode] = 0;
+
 			for (var i = 0; i < this.nVertices; i++) {
 				if (this.adjMatrix[currNode][i] == 1 && !DFSvisited[i] && currNode!=i) {
 					DFSvisited[i] = true;
 					DFSstack.push(i);
 					DFSStatus+= "- Adding node " + i + " to the stack <br>";	
-					nprevAddedNodes++
+					prevAddedNodes[currNode]++;
 				}
 			}	
-			prevAddedNodes.push(currNode)
 		}
 
 		document.getElementById("currDFSStatus").innerHTML = DFSStatus;
@@ -192,36 +192,29 @@ class Graph {
 		console.log("prevAddedNodes: "+prevAddedNodes)
 		console.log("DFSStack: " +DFSstack)
 		console.log("DFSVisited: " + DFSvisited)
-		console.log("nprevAddedNodes: " + nprevAddedNodes)
 		console.log("prevNode: " + prevNode)
 		console.log("currNode: " + currNode)
 
-		if (prevAddedNodes.length == 1) {
-			//return
-		} 
+		if (prevAddedNodesOrder.length == 1) {
+			console.log("star node reached -----")
+			return 
+		}
 
-		var DFSStatus = ""
+		console.log("prevNode: " + prevNode)
+		console.log("currNode: " + currNode)
 
-		//get rid of connections added form currNode
-		for (var i = 0; i < nprevAddedNodes; i++) {
+		var DFSStatus=""
+
+		for (var i = 0; i < prevAddedNodes[currNode]; i++) {
 			var removedNode = DFSstack.pop()
 			DFSvisited[removedNode] = false
 			DFSStatus+= "- Removing node " + removedNode + " from the stack<br>";	
 		}	
-		
-		//don't need as since it is from on the stack it should be true
-		//DFSvisited[currNode] = false
+		//adding currNode back onto end of stack
+		DFSstack.push(currNode)
 
-		//must set visited[i] = false where i is only reachable via currNode
-		//could go through stack and sett all reachable nodes to true
-		
-
-
-		if (!DFSstack.includes(currNode)) {
-			DFSStatus+= "- Adding node " + currNode + " back onto the stack <br>";	
-			console.log("-- Adding node " + currNode + " back onto the stack")
-			DFSstack.push(currNode)
-		}
+		document.getElementById("currDFSStatus").innerHTML = DFSStatus;
+		prevAddedNodes[currNode] = 0;
 
 		//adjusting colours
 		verticies[currNode].set('fill', 'lightslategray');
@@ -229,23 +222,16 @@ class Graph {
 		canvas.renderAll()
 
 		//updating prevNode
-		document.getElementById("currDFSStatus").innerHTML = DFSStatus;
-
-		
-		//update prevAddedNodes list
-		prevAddedNodes.pop()
-
-		prevNode = prevAddedNodes[prevAddedNodes.length-2]
-		currNode = prevAddedNodes[prevAddedNodes.length-1]
+		prevAddedNodesOrder.pop()
+		prevNode = prevAddedNodesOrder[prevAddedNodesOrder.length-2]
+		currNode = prevAddedNodesOrder[prevAddedNodesOrder.length-1]
 		
 	
-		nprevAddedNodes = 0
 
 		console.log("----after previous----")
 		console.log("prevAddedNodes: "+prevAddedNodes)
 		console.log("DFSStack: " +DFSstack)
 		console.log("DFSVisited: " + DFSvisited)
-		console.log("nprevAddedNodes: " + nprevAddedNodes)
 		console.log("prevNode: " + prevNode)
 		console.log("currNode: " + currNode)
 
@@ -256,14 +242,21 @@ class Graph {
 		prevNode=start
 		var BFSStatus = ""
 
+		//add start node to order list
+		prevAddedNodesOrder.push(start)
+		//set number of nodes added to 0
+		prevAddedNodes[start] = 0;
+
 		verticies[start].set('fill', 'lightgreen');
 		canvas.renderAll();
+	
 
 		for (var i = 0; i < this.nVertices; i++) {
 			if (this.adjMatrix[start][i] == 1 && !BFSvisited[i] && start!=i) {
 				BFSvisited[i] = true;
 				BFSqueue.push(i);
 				BFSStatus+= "- Adding node " + i + " to the queue. <br>";
+				prevAddedNodes[start]++;
 			}
 		}
 		document.getElementById("currBFSStatus").innerHTML = BFSStatus;
@@ -271,29 +264,102 @@ class Graph {
 
 	iterateBFS() {
 
+		console.log("----before iterate----")
+		console.log("prevAddedNodesOrder: "+prevAddedNodesOrder)
+		console.log("prevAddedNodes: "+prevAddedNodes)
+		console.log("BFSVisited: " + BFSvisited)
+		console.log("prevNode: " + prevNode)
+		console.log("currNode: " + currNode)
+
 		var BFSStatus = ""
 
 		if (BFSqueue.length == 0 ) {
 			BFSStatus = "- Done";
 		} else {
+
+			prevNode = prevAddedNodesOrder[prevAddedNodesOrder.length-1]
+
 			verticies[prevNode].set('fill', 'maroon');
 			canvas.renderAll();
-			var node = BFSqueue.shift()
-			BFSStatus+= "- Removing node " + node + " off the queue. <br>";	
-			verticies[node].set('fill', 'lightgreen');
+
+			currNode = BFSqueue.shift()
+			BFSStatus+= "- Removing node " + currNode + " off the queue. <br>";	
+			verticies[currNode].set('fill', 'lightgreen');
 			canvas.renderAll();
-			console.log("Removing node " + node + " from the queue...");
+
+			prevAddedNodesOrder.push(currNode)
+			prevAddedNodes[currNode] = 0;
+			
+
+			console.log("Removing node " + currNode + " from the queue...");
 			for (var i = 0; i < this.nVertices; i++) {
-				if (this.adjMatrix[node][i] == 1 && !BFSvisited[i] && node!=i) {
+				if (this.adjMatrix[currNode][i] == 1 && !BFSvisited[i] && currNode!=i) {
 					BFSvisited[i] = true;
 					BFSqueue.push(i);
 					BFSStatus+= "- Adding node " + i + " to the queue";	
+					prevAddedNodes[currNode]++;
 				}
 			}	
-			prevNode=node
+			
 		}
 
 		document.getElementById("currBFSStatus").innerHTML = BFSStatus;
+
+		console.log("----after iterate----")
+		console.log("prevAddedNodesOrder: "+prevAddedNodesOrder)
+		console.log("prevAddedNodes: "+prevAddedNodes)
+		console.log("BFSVisited: " + BFSvisited)
+		console.log("prevNode: " + prevNode)
+		console.log("currNode: " + currNode)
+	}
+
+	previousBFS() {
+
+		console.log("----before pervious----")
+		console.log("prevAddedNodesOrder: "+prevAddedNodesOrder)
+		console.log("prevAddedNodes: "+prevAddedNodes)
+		console.log("BFSVisited: " + BFSvisited)
+		console.log("prevNode: " + prevNode)
+		console.log("currNode: " + currNode)
+
+		if (prevAddedNodesOrder.length == 1) {
+			console.log("star node reached -----")
+			return 
+		}
+
+		console.log("prevNode: " + prevNode)
+		console.log("currNode: " + currNode)
+
+		var BFSStatus=""
+
+		for (var i = 0; i < prevAddedNodes[currNode]; i++) {
+			var removedNode = BFSqueue.pop()
+			BFSvisited[removedNode] = false
+			BFSStatus+= "- Removing node " + removedNode + " from the queue<br>";	
+		}	
+		//adding currNode back onto beginning of queue
+		BFSqueue.unshift(currNode)
+
+		document.getElementById("currBFSStatus").innerHTML = BFSStatus;
+		prevAddedNodes[currNode] = 0;
+
+		//adjusting colours
+		verticies[currNode].set('fill', 'lightslategray');
+		verticies[prevNode].set('fill', 'lightgreen');
+		canvas.renderAll()
+
+		//updating prevNode
+		prevAddedNodesOrder.pop()
+		prevNode = prevAddedNodesOrder[prevAddedNodesOrder.length-2]
+		currNode = prevAddedNodesOrder[prevAddedNodesOrder.length-1]
+
+		console.log("----after prevrious----")
+		console.log("prevAddedNodesOrder: "+prevAddedNodesOrder)
+		console.log("prevAddedNodes: "+prevAddedNodes)
+		console.log("BFSVisited: " + BFSvisited)
+		console.log("prevNode: " + prevNode)
+		console.log("currNode: " + currNode)
+
 	}
 
 	printGraph() { 
@@ -450,6 +516,15 @@ function beginBFS() {
 
 function iterateBFS() {
 	graph.iterateBFS()
+	var currBFSqueue = ""
+	for (var i = 0; i < BFSqueue.length; i++) {
+		currBFSqueue += BFSqueue[i] + "<br>" + "---" + "<br>"
+	}
+	document.getElementById("currBFSqueue").innerHTML = currBFSqueue
+}
+
+function previousBFS() {
+	graph.previousBFS()
 	var currBFSqueue = ""
 	for (var i = 0; i < BFSqueue.length; i++) {
 		currBFSqueue += BFSqueue[i] + "<br>" + "---" + "<br>"
