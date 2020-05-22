@@ -459,8 +459,6 @@ function iterateBFS() {
 
 
 
-
-
 function clearGraph() {
 	canvas.clear()
 	//clear all lists
@@ -468,4 +466,27 @@ function clearGraph() {
 	DFSvisited=[]
 	BFSqueue=[]
 	BFSvisited=[]
+	closeBFSDetails()
+	closeDFSDetails() 
+	verticiesCoords = []
+  	verticies = []
+}
+
+function restartDFS() {
+	DFSstack=[]
+	DFSvisited=[]
+	for (var i = 0; i <verticies.length; i++) {
+		verticies[i].set('fill', 'lightslategray');
+	}
+	beginDFS()
+}
+
+
+function restartBFS() {
+	BFSqueue=[]
+	BFSvisited=[]
+	for (var i = 0; i <verticies.length; i++) {
+		verticies[i].set('fill', 'lightslategray');
+	}
+	beginBFS()
 }
