@@ -214,6 +214,7 @@ class Graph {
 		}	
 		//adding currNode back onto end of stack
 		DFSstack.push(currNode)
+		DFSStatus+= "- Adding node " + currNode + " back onto the stack<br>";	
 
 		document.getElementById("currDFSStatus").innerHTML = DFSStatus;
 		prevAddedNodes[currNode] = 0;
@@ -341,6 +342,7 @@ class Graph {
 		}	
 		//adding currNode back onto beginning of queue
 		BFSqueue.unshift(currNode)
+		BFSStatus+= "- Adding node " + currNode + " back onto the queue<br>";	
 
 		document.getElementById("currBFSStatus").innerHTML = BFSStatus;
 		prevAddedNodes[currNode] = 0;
@@ -474,7 +476,7 @@ function createLine(points) {
 
 function beginDFS() {
 	//get rid of previous algorithm details first
-	//restartAlgorithm()
+	restartAlgorithm()
 	
 	showDFSDetails()
 	var form = $('#DFSstartVertexForm')[0].elements
@@ -508,6 +510,7 @@ function previousDFS() {
 
 function beginBFS() {
 	restartAlgorithm()
+	
 	showBFSDetails()
 	var form = $('#BFSstartVertexForm')[0].elements
 	start = parseInt(form[0].value)
@@ -554,8 +557,11 @@ function clearGraph() {
 }
 
 function restartAlgorithm() {
+	closeDFSDetails()
+	closeDFSDetails()
 	restartDFS()
 	restartBFS()
+	
 }
 
 function restartDFS() {

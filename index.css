@@ -17,3 +17,7 @@
 	padding: 10px;
 	height: 600px;
 }
+
+.myDropdown:hover .dropdown-content {
+	display: block;
+}
