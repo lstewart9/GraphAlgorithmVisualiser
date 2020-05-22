@@ -267,13 +267,6 @@ class Graph {
 
 	iterateBFS() {
 
-		console.log("----before iterate----")
-		console.log("prevAddedNodesOrder: "+prevAddedNodesOrder)
-		console.log("prevAddedNodes: "+prevAddedNodes)
-		console.log("BFSVisited: " + BFSvisited)
-		console.log("prevNode: " + prevNode)
-		console.log("currNode: " + currNode)
-
 		var BFSStatus = ""
 
 		if (BFSqueue.length == 0 ) {
@@ -308,22 +301,9 @@ class Graph {
 
 		document.getElementById("currBFSStatus").innerHTML = BFSStatus;
 
-		console.log("----after iterate----")
-		console.log("prevAddedNodesOrder: "+prevAddedNodesOrder)
-		console.log("prevAddedNodes: "+prevAddedNodes)
-		console.log("BFSVisited: " + BFSvisited)
-		console.log("prevNode: " + prevNode)
-		console.log("currNode: " + currNode)
 	}
 
 	previousBFS() {
-
-		console.log("----before pervious----")
-		console.log("prevAddedNodesOrder: "+prevAddedNodesOrder)
-		console.log("prevAddedNodes: "+prevAddedNodes)
-		console.log("BFSVisited: " + BFSvisited)
-		console.log("prevNode: " + prevNode)
-		console.log("currNode: " + currNode)
 
 		if (prevAddedNodesOrder.length == 1) {
 			console.log("star node reached -----")
@@ -356,13 +336,6 @@ class Graph {
 		prevAddedNodesOrder.pop()
 		prevNode = prevAddedNodesOrder[prevAddedNodesOrder.length-2]
 		currNode = prevAddedNodesOrder[prevAddedNodesOrder.length-1]
-
-		console.log("----after prevrious----")
-		console.log("prevAddedNodesOrder: "+prevAddedNodesOrder)
-		console.log("prevAddedNodes: "+prevAddedNodes)
-		console.log("BFSVisited: " + BFSvisited)
-		console.log("prevNode: " + prevNode)
-		console.log("currNode: " + currNode)
 
 	}
 
