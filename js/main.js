@@ -474,7 +474,7 @@ function createLine(points) {
 
 function beginDFS() {
 	//get rid of previous algorithm details first
-	restartAlgorithm()
+	//restartAlgorithm()
 	
 	showDFSDetails()
 	var form = $('#DFSstartVertexForm')[0].elements
@@ -564,7 +564,6 @@ function restartDFS() {
 	for (var i = 0; i <verticies.length; i++) {
 		verticies[i].set('fill', 'lightslategray');
 	}
-	beginDFS()
 }
 
 
@@ -574,5 +573,4 @@ function restartBFS() {
 	for (var i = 0; i <verticies.length; i++) {
 		verticies[i].set('fill', 'lightslategray');
 	}
-	beginBFS()
 }
