@@ -11,8 +11,9 @@
 	margin-left: 20px;
 }
 
-.DFSdetails {
+.algorithmDetails {
 	border: thick solid lightslategray;
 	margin-right: 20px;
+	padding: 10px;
 	height: 600px;
 }

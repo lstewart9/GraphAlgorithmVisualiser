@@ -25,8 +25,8 @@
 		Algorithms
 	  </button>
 	  <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-	  <a class="dropdown-item" href="#" data-toggle="modal" data-target="#startVertexleModal">Depth First Search</a>
-		<a class="dropdown-item" href="#">Another action</a>
+	  <a class="dropdown-item" href="#" data-toggle="modal" data-target="#DFSstartVertexModal">Depth First Search</a>
+		<a class="dropdown-item" href="#"data-toggle="modal" data-target="#BFSstartVertexModal">Breadth First Search</a>
 		<a class="dropdown-item" href="#">Something else here</a>
 	  </div>
 </div>
@@ -34,36 +34,56 @@
 </center>
 <div class = "row">
 	<div class="col-md-8">
-		<div class = myDiv>
-			<canvas id="myCanvas" width="920" height="600">
+		<div class="myDiv" id="canvasDiv" hidden>
+			<canvas id="myCanvas">
 			</canvas>
 		</div>
 	</div>
 	<div class="col-md-4">
-		<div id="DFSdetails" class = "DFSdetails" style="padding: 10px;">
-			<h2>Depth First Seach </h2>
-			<br>
-			<button type="button" class="btn btn-info" onclick="iterateDFS()" >NEXT STEP</button>
-			
-			<div>
+		<div class = "algorithmDetails">
+			<div id="DFSdetails" hidden>
+				<h2>Depth First Seach </h2>
 				<br>
-				<h4>Current Stack: </h4>
-				<center>
-				<h4 id="currDFSStack"></h4>
-				</center>
+				<button type="button" class="btn btn-info" onclick="iterateDFS()" >NEXT STEP</button>
+				<!-- 
+				<button type="button" class="btn btn-info" onclick="previousDFS()" >PREVIOUS STEP</button>
+-->
+				<div>
+					<br>
+					<h4>Current Stack: </h4>
+					<center>
+					<h4 id="currDFSStack"></h4>
+					</center>
+					<br>
+					<h4>Current Status: </h4>
+					<h4 id="currDFSStatus"></h4>
+				</div>
+			</div>
+			<div id="BFSdetails" hidden>
+				<h2>Breadth First Seach </h2>
 				<br>
-				<h4>Current Status: </h4>
-				<h4 id="currDFSStatus"></h4>
+				<button type="button" class="btn btn-info" onclick="iterateBFS()" >NEXT STEP</button>
+				
+				<div>
+					<br>
+					<h4>Current Queue: </h4>
+					<center>
+					<h4 id="currBFSqueue"></h4>
+					</center>
+					<br>
+					<h4>Current Status: </h4>
+					<h4 id="currBFSStatus"></h4>
+				</div>
 			</div>
 		</div>
 	</div>
 </div>
 
-<div class="modal fade" id="startVertexleModal" tabindex="-1" role="dialog" aria-labelledby="startVertexLabel" aria-hidden="true">
+<div class="modal fade" id="DFSstartVertexModal" tabindex="-1" role="dialog" aria-labelledby="startVertexLabel" aria-hidden="true">
 	<div class="modal-dialog" role="document">
 	  <div class="modal-content">
 		<div class="modal-body">
-			<form action="#" id="startVertexForm" >
+			<form action="#" id="DFSstartVertexForm" >
 				<div class="form-row align-items-center">
 					<div class="col-4">
 						<label for="e_name">Starting Vertex:</label>
@@ -77,6 +97,29 @@
 		<div class="modal-footer">
 		  <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
 		  <button type="button" class="btn btn-primary" onclick="beginDFS()" data-dismiss="modal">Begin</button>
+		</div>
+	  </div>
+	</div>
+  </div>
+
+  <div class="modal fade" id="BFSstartVertexModal" tabindex="-1" role="dialog" aria-labelledby="startVertexLabel" aria-hidden="true">
+	<div class="modal-dialog" role="document">
+	  <div class="modal-content">
+		<div class="modal-body">
+			<form action="#" id="BFSstartVertexForm" >
+				<div class="form-row align-items-center">
+					<div class="col-4">
+						<label for="e_name">Starting Vertex:</label>
+					</div>
+					<div class="col-sm-8">
+						<input type="text" class="form-control" id="start" required>
+					</div>
+				</div>
+			</form>
+		</div>
+		<div class="modal-footer">
+		  <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+		  <button type="button" class="btn btn-primary" onclick="beginBFS()" data-dismiss="modal">Begin</button>
 		</div>
 	  </div>
 	</div>
