@@ -67,6 +67,8 @@ function closeDFSDetails() {
 function generateGraph() {
 	console.log("Generating Graph...");
 
+	clearGraph()
+
 	// generate random number of verticies
 	var nVerticies = randomNumber(2,6)
 	graph = new Graph(nVerticies);
@@ -471,6 +473,9 @@ function createLine(points) {
 
 
 function beginDFS() {
+	//get rid of previous algorithm details first
+	restartAlgorithm()
+	
 	showDFSDetails()
 	var form = $('#DFSstartVertexForm')[0].elements
 	start = parseInt(form[0].value)
@@ -502,6 +507,7 @@ function previousDFS() {
 }
 
 function beginBFS() {
+	restartAlgorithm()
 	showBFSDetails()
 	var form = $('#BFSstartVertexForm')[0].elements
 	start = parseInt(form[0].value)
@@ -545,6 +551,11 @@ function clearGraph() {
 	closeDFSDetails() 
 	verticiesCoords = []
   	verticies = []
+}
+
+function restartAlgorithm() {
+	restartDFS()
+	restartBFS()
 }
 
 function restartDFS() {
