@@ -116,25 +116,27 @@ class Graph {
 		//this.AdjList.get(w).push(v); 
 	} 
 
-	startDFS(start) {
-		this.visited[start] = true
+	setStartNode(startNode) {
+		this.startNode=startNode
+	}
+
+	startDFS() {
+		this.visited[this.startNode] = true
 		var DFSStatus = ""
 
-		this.startNode = start
-
 		//add start node to order list
-		this.prevAddedNodesOrder.push(start)
-		this.prevAddedNodes[start] = 0;
+		this.prevAddedNodesOrder.push(this.startNode)
+		this.prevAddedNodes[this.startNode] = 0;
 
-		this.verticies[start].set('fill', 'lightgreen');
+		this.verticies[this.startNode].set('fill', 'lightgreen');
 		canvas.renderAll();
 
 		for (var i = 0; i < this.nVertices; i++) {
-			if (this.adjMatrix[start][i] == 1 && !this.visited[i] && start!=i) {
+			if (this.adjMatrix[this.startNode][i] == 1 && !this.visited[i] && this.startNode!=i) {
 				this.visited[i] = true;
 				this.DFSstack.push(i);
 				DFSStatus+= "- Adding node " + i + " to the stack. <br>";
-				this.prevAddedNodes[start]++;
+				this.prevAddedNodes[this.startNode]++;
 			}
 		}
 		document.getElementById("currDFSStatus").innerHTML = DFSStatus;
@@ -206,28 +208,26 @@ class Graph {
 
 	}
 
-	startBFS(start) {
-		this.visited[start] = true
-
-		this.startNode = start
+	startBFS() {
+		this.visited[this.startNode] = true
 
 		var BFSStatus = ""
 
 		//add start node to order list
-		this.prevAddedNodesOrder.push(start)
+		this.prevAddedNodesOrder.push(this.startNode)
 		//set number of nodes added to 0
-		this.prevAddedNodes[start] = 0;
+		this.prevAddedNodes[this.startNode] = 0;
 
-		this.verticies[start].set('fill', 'lightgreen');
+		this.verticies[this.startNode].set('fill', 'lightgreen');
 		canvas.renderAll();
 	
 
 		for (var i = 0; i < this.nVertices; i++) {
-			if (this.adjMatrix[start][i] == 1 && !this.visited[i] && start!=i) {
+			if (this.adjMatrix[this.startNode][i] == 1 && !this.visited[i] && this.startNode!=i) {
 				this.visited[i] = true;
 				this.BFSqueue.push(i);
 				BFSStatus+= "- Adding node " + i + " to the queue. <br>";
-				this.prevAddedNodes[start]++;
+				this.prevAddedNodes[this.startNode]++;
 			}
 		}
 		document.getElementById("currBFSStatus").innerHTML = BFSStatus;
@@ -254,7 +254,7 @@ class Graph {
 			this.prevAddedNodesOrder.push(this.currNode)
 			this.prevAddedNodes[this.currNode] = 0;
 			
-			console.log("Removing node " + currNode + " from the queue...");
+			console.log("Removing node " + this.currNode + " from the queue...");
 			for (var i = 0; i < this.nVertices; i++) {
 				if (this.adjMatrix[this.currNode][i] == 1 && !this.visited[i] && this.currNode!=i) {
 					this.visited[i] = true;
@@ -298,7 +298,7 @@ class Graph {
 
 		//updating prevNode
 		this.prevAddedNodesOrder.pop()
-		this.prevNode = this,prevAddedNodesOrder[this.prevAddedNodesOrder.length-2]
+		this.prevNode = this.prevAddedNodesOrder[this.prevAddedNodesOrder.length-2]
 		this.currNode = this.prevAddedNodesOrder[this.prevAddedNodesOrder.length-1]
 
 	}
@@ -312,6 +312,11 @@ class Graph {
 		this.prevAddedNodes = []
 		this.prevAddedNodesOrder = []
 		this.startNode = null
+
+		for (var i = 0; i <this.verticies.length; i++) {
+			this.verticies[i].set('fill', 'lightslategray');
+		}
+
 	}
 
 	restartDFS() {
@@ -323,7 +328,7 @@ class Graph {
 			this.verticies[i].set('fill', 'lightslategray');
 		}
 		canvas.renderAll()
-		this.startDFS(startNode)
+		this.startDFS(this.startNode)
 	}
 	
 	
@@ -336,7 +341,7 @@ class Graph {
 			this.verticies[i].set('fill', 'lightslategray');
 		}
 		canvas.renderAll()
-		this.startBFS(startNode)
+		this.startBFS(this.startNode)
 	}
 
 	printGraph() { 
@@ -454,7 +459,8 @@ function beginDFS() {
 	var form = $('#DFSstartVertexForm')[0].elements
 	start = parseInt(form[0].value)
 	console.log(start)
-	graph.startDFS(start)
+	graph.setStartNode(start)
+	graph.startDFS()
 	var currDFSStack = ""
 	for (var i = 0; i < DFSstack.length; i++) {
 		currDFSStack += DFSstack[i] + "<br>" + "---" + "<br>"
@@ -486,7 +492,8 @@ function beginBFS() {
 	var form = $('#BFSstartVertexForm')[0].elements
 	start = parseInt(form[0].value)
 	console.log(start)
-	graph.startBFS(start)
+	graph.setStartNode(start)
+	graph.startBFS()
 	var currBFSqueue = ""
 	for (var i = 0; i < BFSqueue.length; i++) {
 		currBFSqueue += BFSqueue[i] + "<br>" + "---" + "<br>"
